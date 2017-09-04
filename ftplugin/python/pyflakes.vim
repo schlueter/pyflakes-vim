@@ -37,24 +37,9 @@ if !exists('g:pyflakes_use_quickfix')
     let g:pyflakes_use_quickfix = 1
 endif
 
+    let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h') . '/runner.py'
+    execute 'pyfile ' . s:path
 
-Python << EOF
-import vim
-from os.path import dirname, join as pjoin
-import sys
-
-if sys.version_info[:2] < (2, 5):
-    raise AssertionError('Vim must be compiled with Python 2.5 or higher; you have ' + sys.version)
-
-# get the directory this script is in: the pyflakes python module should be installed there.
-script_dir = dirname(vim.eval('expand("<sfile>")'))
-flakes_dir = pjoin(script_dir, 'pyflakes')
-for path in (script_dir, flakes_dir):
-    if path not in sys.path:
-        sys.path.insert(0, path)
-
-from flaker import check, vim_quote, SyntaxError
-EOF
     let b:did_python_init = 1
 endif
 
@@ -174,7 +159,7 @@ for w in check(vim.current.buffer):
     vim.command("let s:matchDict['lineNum'] = " + lineno)
     vim.command("let s:matchDict['message'] = '%s'" % vim_quote(w.message % w.message_args))
     vim.command("let b:matchedlines[" + lineno + "] = s:matchDict")
-    
+
     vim.command("let l:qf_item = {}")
     vim.command("let l:qf_item.bufnr = bufnr('%')")
     vim.command("let l:qf_item.filename = expand('%')")

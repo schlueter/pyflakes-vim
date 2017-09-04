@@ -33,9 +33,9 @@ if !exists("b:did_python_init")
         finish
     endif
 
-if !exists('g:pyflakes_use_quickfix')
-    let g:pyflakes_use_quickfix = 1
-endif
+    if !exists('g:pyflakes_use_quickfix')
+        let g:pyflakes_use_quickfix = 1
+    endif
 
     let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h') . '/runner.py'
     execute 'pyfile ' . s:path
@@ -69,7 +69,7 @@ endif
 
 " Call this function in your .vimrc to update PyFlakes
 if !exists(":PyflakesUpdate")
-  command PyflakesUpdate :call s:PyflakesUpdate()
+    command PyflakesUpdate :call s:PyflakesUpdate()
 endif
 
 " Hook common text manipulation commands to update PyFlakes
@@ -148,7 +148,7 @@ if !exists("*s:RunPyflakes")
         let b:qf_list = []
         let b:qf_window_count = -1
 
-        Python << EOF
+        python << EOF
 for w in check(vim.current.buffer):
     if not isinstance(w.lineno, int):
         lineno = str(w.lineno.lineno)
@@ -239,4 +239,3 @@ if !exists('*s:ClearPyflakes')
         let b:cleared = 1
     endfunction
 endif
-
